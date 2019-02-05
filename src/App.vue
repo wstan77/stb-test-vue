@@ -4,14 +4,14 @@
       <img alt="Vue logo" src="./assets/images/users.png">
     </div>
     <AppMenu />
-    <Users/>
+    <Users />
   </div>
 </template>
 
 <script>
 import Users from './components/Users.vue'
 import AppMenu from './components/AppMenu.vue'
-
+ 
 export default {
   name: 'app',
   components: {
