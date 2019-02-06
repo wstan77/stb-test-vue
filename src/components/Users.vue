@@ -5,7 +5,7 @@
       Simple system done with VueJS for rendering and making CRUD operations with Users got from JSONPlaceholder API.
     </p>  
     <a href="#!" class="btn-add-user">+</a>
-    <table class="table" v-if="info.length > 0">
+    <table class="table" v-if="usersArray.length > 0">
       <thead class="thead-header">
         <tr>
           <th></th>
@@ -16,7 +16,7 @@
         </tr>
       </thead>
       <tbody> 
-          <tr class="trBody" v-for="user in info" v-bind:key="user.id">
+          <tr class="trBody" v-for="user in usersArray" v-bind:key="user.id">
             <td><p class="letterImage">L</p></td>
             <td>
               <h4 class="title text">{{user.name}}</h4>
@@ -39,11 +39,11 @@
           </tr> 
       </tbody>
     </table>
-    <div v-if="info.length == 0">
+    <div v-if="usersArray.length == 0">
       <p class="notFound">Users not found in this application</p>
     </div>
   </div>
-</template>
+</template> 
 
 <script>
 import "../assets/styles/usersComponent.css";
@@ -62,13 +62,13 @@ export default {
         if(!usersList){
           localStorage.setItem("USERS", JSON.stringify(response.data))
         }
-        this.info = JSON.parse(localStorage.getItem("USERS"));
+        this.usersArray = JSON.parse(localStorage.getItem("USERS"));
       })
       .catch(error => console.log(error))
   },
   data(){
     return{
-      info: []
+      usersArray: []
     }
   },
   methods:{
@@ -77,7 +77,7 @@ export default {
       const userIndex = usersList.findIndex(r=>r.id == id);
       const newUserList = usersList.filter(r=>r.id !== usersList[userIndex].id);
       localStorage.setItem("USERS", JSON.stringify(newUserList))
-      this.info = JSON.parse(localStorage.getItem("USERS"));
+      this.usersArray = JSON.parse(localStorage.getItem("USERS"));
     }
   }
 }
