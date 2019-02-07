@@ -1,4 +1,7 @@
 # STB Group Project Test
+First of all, It's necessary install *npm* , because we will need use npm command on our shell.
+You can see more information here: https://www.npmjs.com/get-npm.
+
 It will be necessary to do some steps for running this project.
 This is a CRUD operations project using VueJS library of Javascript.
 ## Project setup
@@ -15,3 +18,11 @@ npm install
 ```
 npm run serve
 ```
+
+## Features developed:
+- Render information from https://jsonplaceholder.typicode.com/users API.
+- You can edit each one of registers.
+- You will be able of delete easily Registers.
+- Filters of data using input control.
+- Friendly design.
+- Tested on Chrome & Firefox Browsers.
