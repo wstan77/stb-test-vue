@@ -83,7 +83,7 @@
         
         <input
           type="submit"
-          value="Create user"
+          value="Save"
           class="btn-submit-user"
         > 
         <a href="#!" v-on:click="cleanForm()" class="btn-cancel-user">Cancel</a>
@@ -102,8 +102,6 @@ export default {
     overrideUsers: Function
   },
   beforeUpdate(){
-    console.log(this.currentUser);
-    
     this.user.id = this.currentUser==null ? null : this.currentUser.id;
     this.user.name = this.currentUser==null ? (this.user.name || null) : (this.user.name || this.currentUser.name)
     this.user.email = this.currentUser==null ? (this.user.email || null) : (this.user.email || this.currentUser.email)
@@ -146,14 +144,12 @@ export default {
               catchPhrase: this.user.company.catchPhrase
             }
           });
-
-          localStorage.setItem("USERS", JSON.stringify(usersList))
-          this.overrideUsers(JSON.parse(localStorage.getItem("USERS"))); 
+          this.changeArray(usersList);
         }else{ 
           const userIndex = usersList.findIndex(r => r.id ==this.user.id); 
           usersList[userIndex] = this.user; 
-          localStorage.setItem("USERS", JSON.stringify(usersList))
-          this.overrideUsers(JSON.parse(localStorage.getItem("USERS"))); 
+          this.changeArray(usersList);
+          
         }
         this.cleanForm();
       }else{
@@ -169,13 +165,18 @@ export default {
       Object.keys(this.user).reduce((r, k) => { 
         if(typeof this.user[k]=="object"){
           Object.keys(this.user[k]).reduce((r, k1) => { 
-            this.user[k][k1] = null;  
+            this.user.company.name = null;  
+            this.user.company.catchPhrase = null;  
           })
         } else{
           this.user[k] = null; 
         }
       });
       this.openForm(false);
+    },
+    changeArray(array){
+      localStorage.setItem("USERS", JSON.stringify(array))
+      this.overrideUsers(JSON.parse(localStorage.getItem("USERS"))); 
     }
   }
 }

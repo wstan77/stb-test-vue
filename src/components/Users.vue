@@ -4,7 +4,9 @@
       <h1>User list</h1>
       <p>
         Simple system done with VueJS for rendering and making CRUD operations with Users got from JSONPlaceholder API.
-      </p>  
+      </p>
+      <input v-model="textFilter" v-on:keyup="filter" class="input" placeholder="Search user"/>
+      <br />
       <a href="#!" class="btn-add-user" v-on:click="openForm(true)">+</a>
       <table class="table" v-if="usersArray.length > 0">
         <thead class="thead-header">
@@ -84,7 +86,9 @@ export default {
       showForm: false,
       errors: [],
       userId: null,
-      currentUser: null
+      currentUser: null,
+      randomItem: Math.random(5),
+      textFilter: ""
     }
   },
   methods:{
@@ -106,6 +110,13 @@ export default {
     },
     overrideUsers(array){
       this.usersArray=array;
+    },
+    filter(){
+      const jsonArray = JSON.parse(localStorage.getItem("USERS"));
+      const key = this.textFilter;
+      this.usersArray = jsonArray.filter(function(item){
+        return item.name.toLowerCase().indexOf(key.toLowerCase())>-1;
+      });
     }
   }
 }
