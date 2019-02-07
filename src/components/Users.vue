@@ -9,7 +9,7 @@
       <p>
         Simple system done with VueJS for rendering and making CRUD operations with Users got from JSONPlaceholder API.
       </p>  
-      <a href="#!" class="btn-add-user" v-on:click="showForm=true">+</a>
+      <a href="#!" class="btn-add-user" v-on:click="getForm()">+</a>
       <table class="table" v-if="usersArray.length > 0">
         <thead class="thead-header">
           <tr>
@@ -21,27 +21,27 @@
           </tr>
         </thead>
         <tbody> 
-            <tr class="trBody" v-for="user in usersArray" v-bind:key="user.id">
-              <td><p class="letterImage">{{user.name[0]}}</p></td>
-              <td>
-                <h4 class="title text">{{user.name}}</h4>
-                <p class="text text-data"><a class="at-email">@</a> {{user.email}}</p>
-                <p class="text text-data"><img src="../assets/images/marker.png" alt="Marker" class="marker-img"> Kulas Light, Gwenborough</p>
-              </td>
-              <td><a class="text-link" v-bind:href="'//' + user.website" target="blank">{{user.website}}</a></td>
-              <td>
-                <div class="well">
-                  <p class="text text-center text-companyName">{{user.company.name}}</p>
-                  <p class="text text-center text-slogan">"{{user.company.catchPhrase && user.company.catchPhrase}}"</p>
-                </div>
-              </td>
-              <td>
-                <div class="center">
-                  <a href="" class="btn">Editar</a>
-                  <a href="#!" class="btn" v-on:click="deleteUser(user.id)">Eliminar</a>
-                </div>
-              </td>
-            </tr> 
+          <tr class="trBody" v-for="user in usersArray" v-bind:key="user.id">
+            <td><p class="letterImage">{{user.name[0]}}</p></td>
+            <td>
+              <h4 class="title text">{{user.name}}</h4>
+              <p class="text text-data"><a class="at-email">@</a> {{user.email}}</p>
+              <p class="text text-data"><img src="../assets/images/marker.png" alt="Marker" class="marker-img"> Kulas Light, Gwenborough</p>
+            </td>
+            <td><a class="text-link" v-bind:href="'//' + user.website" target="blank">{{user.website}}</a></td>
+            <td>
+              <div class="well">
+                <p class="text text-center text-companyName">{{user.company.name}}</p>
+                <p class="text text-center text-slogan">"{{user.company.catchPhrase && user.company.catchPhrase}}"</p>
+              </div>
+            </td>
+            <td>
+              <div class="center">
+                <a href="#!" class="btn" v-on:click="loadUser(user.id)">Editar</a>
+                <a href="#!" class="btn" v-on:click="deleteUser(user.id)">Eliminar</a>
+              </div>
+            </td>
+          </tr> 
         </tbody>
       </table>
       <div v-if="usersArray.length == 0">
@@ -65,11 +65,11 @@
           </ul>
         </p>
       <form 
-        @submit="createUser" 
+        @submit="manageUser" 
         class="userFormFor"
         method="post"> 
 
-        <label for="userName">User name</label>
+        <label class="label" for="userName">User name</label>
         <br />
         <input
           id="userName"
@@ -80,7 +80,7 @@
         > 
         <br />
         
-        <label for="userEmail">Email </label>
+        <label class="label" for="userEmail">Email </label>
         <br />
         <input
           id="userEmail"
@@ -91,7 +91,7 @@
         >
         <br />
         
-        <label for="userWebsite">Website</label>
+        <label class="label" for="userWebsite">Website</label>
         <br />
         <input
           id="userWebsite"
@@ -102,7 +102,7 @@
         >
         <br />
         
-        <label for="company.companyName">Company Name</label>
+        <label class="label" for="company.companyName">Company Name</label>
         <br />
         <input
           id="company.companyName"
@@ -113,15 +113,15 @@
         >
         <br />
         
-        <label for="company.companyCatchPhrase">Company Catch Phrase</label>
+        <label class="label" for="company.companyCatchPhrase">Company Catch Phrase</label>
         <br />
-        <input
+        <textarea
           id="company.companyCatchPhrase"
           v-model="company.companyCatchPhrase"
           type="text"
           name="company.companyCatchPhrase"
-          class="input"
-        > 
+          class="input">
+        </textarea> 
         <br />
         
         <input
@@ -160,16 +160,29 @@ export default {
       usersArray: [],
       showForm: false,
       errors: [],
+      userId: null,
       userName: null,
       userEmail: null,
       userWebsite: null,
       company: {
         companyName: null,
-        companyCatchPhrase: null
+        companyCatchPhrase: null,
       }
     }
   },
   methods:{
+    initVariables(){
+      return { 
+        userId: null,
+        userName: null,
+        userEmail: null,
+        userWebsite: null,
+        company: {
+          companyName: null,
+          companyCatchPhrase: null,
+        }
+      }
+    },
     deleteUser(id){ 
       const usersList = JSON.parse(localStorage.getItem("USERS"));
       const userIndex = usersList.findIndex(r=>r.id == id);
@@ -178,29 +191,48 @@ export default {
       localStorage.setItem("USERS", JSON.stringify(newUserList))
       this.usersArray = JSON.parse(localStorage.getItem("USERS"));
     },
-    createUser: function (e) {
+    manageUser: function (e) {
       e.preventDefault();
-      if (this.userName && this.userEmail) { 
-        const usersList = JSON.parse(localStorage.getItem("USERS"));
-        usersList.unshift({
-          id: this.usersArray.length + 1,
-          name: this.userName,
-          email: this.userEmail,
-          website: this.userWebsite,
-          company: {
-            name: this.company.companyName,
-            catchPhrase: this.company.companyCatchPhrase
-          }
-        });
+      if(this.userId == null){
+        if (this.userName && this.userEmail) { 
+          const usersList = JSON.parse(localStorage.getItem("USERS"));
+          usersList.unshift({
+            id: this.usersArray.length + 1,
+            name: this.userName,
+            email: this.userEmail,
+            website: this.userWebsite,
+            company: {
+              name: this.company.companyName,
+              catchPhrase: this.company.companyCatchPhrase
+            }
+          });
 
-        localStorage.setItem("USERS", JSON.stringify(usersList))
-        this.usersArray = JSON.parse(localStorage.getItem("USERS"));
-        this.showForm=false;
-      }else{
-        if (!this.userName) {
-          this.errors.push('Name required.');
+          localStorage.setItem("USERS", JSON.stringify(usersList))
+          this.usersArray = JSON.parse(localStorage.getItem("USERS"));
+          this.showForm=false;
+        }else{
+          if (!this.userName) {
+            this.errors.push('Name required.');
+          }
         }
+      }else{
+        alert("editando....")
       }
+      
+    },
+    getForm(){
+      this.showForm=true;
+      this.initVariables()
+    },
+    loadUser(id){
+      this.showForm = true,
+      this.userId = id;
+      const currentUser = JSON.parse(localStorage.getItem("USERS")).filter(r => r.id == id);  
+      this.userName=currentUser[0].name;
+      this.userEmail=currentUser[0].email;
+      this.userWebsite=currentUser[0].website;
+      this.company.companyName=currentUser[0].company.name;
+      this.company.companyCatchPhrase=currentUser[0].company.catchPhrase;
     }
   }
 }

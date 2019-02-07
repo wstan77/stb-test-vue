@@ -120,6 +120,30 @@ input.input{
   -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
   -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
   transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  margin-top: 10px;
+}
+
+
+textarea.input{
+  box-shadow: none;
+  border-color: #d2d6de;
+  display: block;
+  width: 50%;
+  height: 94px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  margin-top: 10px;
 }
 .userFormFor{
   background: #666;
@@ -153,4 +177,4 @@ input.input{
   padding-left: 15px;
   padding-right: 15px; 
   margin-right: 15px;
-}
+} 
