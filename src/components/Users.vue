@@ -9,7 +9,7 @@
       <input v-model="textFilter" v-on:keyup="filter" class="input" placeholder="Search user"/>
       <br />
       </div>
-      <a href="#!" class="btn-add-user" v-on:click="openForm(true)">+</a>
+      <a href="#!" class="btn-add-user" v-on:click="openForm(true, 'create')">+</a>
       <table class="table" v-if="usersArray.length > 0">
         <thead class="thead-header">
           <tr>
@@ -52,6 +52,7 @@
 
     <UsersForm 
       v-bind:showForm="this.showForm"
+      v-bind:userFormTitle="this.userFormTitle"
       v-bind:openForm="this.openForm"
       v-bind:currentUser="this.currentUser"
       v-bind:usersArray="this.usersArray"
@@ -88,9 +89,9 @@ export default {
       showForm: false,
       errors: [],
       userId: null,
-      currentUser: null,
-      randomItem: Math.random(5),
-      textFilter: ""
+      currentUser: null, 
+      textFilter: "",
+      userFormTitle: ""
     }
   },
   methods:{
@@ -103,12 +104,19 @@ export default {
       this.usersArray = JSON.parse(localStorage.getItem("USERS"));
     }, 
     loadUser(id){
-      this.showForm = true;
+      this.openForm(true, "edit")
       this.currentUser = JSON.parse(localStorage.getItem("USERS")).filter(r => r.id == id)[0];
     },
-    openForm(show){
+    openForm(show, action){
       this.showForm=show;
       this.currentUser = null;
+      if(action){
+        if(action=="edit"){
+          this.userFormTitle="Edit user"
+        }else{
+          this.userFormTitle="New user"
+        }
+      }
     },
     overrideUsers(array){
       this.usersArray=array;

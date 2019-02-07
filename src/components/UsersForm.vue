@@ -1,10 +1,10 @@
 <template>
    <div class="userForm" v-if="showForm==true">
      <div class="padding-container">
-       <h1>New User</h1>
+       <h1>{{userFormTitle}}</h1>
         <img alt="AddUser" src="../assets/images/add-user.png" class="add-user-image">
         <p>
-          You can create a new User with his personal information right here!.
+          You can create and edit Users with his personal information right here!.
         </p>
      </div> 
       <div v-if="errors.length">
@@ -124,11 +124,10 @@ export default {
     openForm: Function,
     currentUser: Object,
     usersArray: Array,
-    overrideUsers: Function
+    overrideUsers: Function,
+    userFormTitle: String
   },
   beforeUpdate(){
-    console.log(this.currentUser);
-    
     this.user.id = this.currentUser==null ? null : this.currentUser.id;
     this.user.name = this.currentUser==null ? (this.user.name || null) : (this.user.name || this.currentUser.name)
     this.user.email = this.currentUser==null ? (this.user.email || null) : (this.user.email || this.currentUser.email)
