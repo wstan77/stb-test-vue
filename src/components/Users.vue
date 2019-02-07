@@ -1,12 +1,14 @@
 <template>
   <div>
     <div class="userList" v-if="showForm==false">
+      <div class="padding-container">
       <h1>User list</h1>
       <p>
         Simple system done with VueJS for rendering and making CRUD operations with Users got from JSONPlaceholder API.
       </p>
       <input v-model="textFilter" v-on:keyup="filter" class="input" placeholder="Search user"/>
       <br />
+      </div>
       <a href="#!" class="btn-add-user" v-on:click="openForm(true)">+</a>
       <table class="table" v-if="usersArray.length > 0">
         <thead class="thead-header">
@@ -19,7 +21,7 @@
           </tr>
         </thead>
         <tbody> 
-          <tr class="trBody" v-for="user in usersArray" v-bind:key="user.id">
+          <tr class="trBody" v-for="user in usersArray" v-bind:key="user.id" v-bind:data="user.id">
             <td><p class="letterImage">{{user.name[0]}}</p></td>
             <td>
               <h4 class="title text">{{user.name}}</h4>
@@ -27,7 +29,7 @@
               <p class="text text-data"><img src="../assets/images/marker.png" alt="Marker" class="marker-img"> {{user.address && user.address.street}}, {{user.address && user.address.city}}</p>
               <p class="text text-data"><img src="../assets/images/phone.png" alt="Marker" class="marker-img"> {{user.phone}}</p>
             </td>
-            <td><a class="text-link" v-bind:href="'//' + user.website" target="blank">{{user.website}}</a></td>
+            <td class="text-center"><a class="text-link text-center" v-bind:href="'//' + user.website" target="blank">{{user.website}}</a></td>
             <td>
               <div class="well">
                 <p class="text text-center text-companyName">{{user.company.name}}</p>
@@ -36,8 +38,8 @@
             </td>
             <td>
               <div class="center">
-                <a href="#!" class="btn" v-on:click="loadUser(user.id)">Editar</a>
-                <a href="#!" class="btn" v-on:click="deleteUser(user.id)">Eliminar</a>
+                <a href="#!" class="btn" v-on:click="loadUser(user.id)">Edit</a>
+                <a href="#!" class="btn" v-on:click="deleteUser(user.id)">Delete</a>
               </div>
             </td>
           </tr> 

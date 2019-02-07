@@ -1,15 +1,16 @@
 <template>
    <div class="userForm" v-if="showForm==true">
-      <h1>New User</h1>
-      <img alt="AddUser" src="../assets/images/add-user.png" class="add-user-image">
-      <p>
-        You can create a new User with his personal information right here!.
-      </p>
-
-        <div v-if="errors.length">
-          <p><b>Please correct the following error(s):</b></p> 
-          <p v-for="error in errors" v-bind:key="error.id" class="validation-item">{{ error }}</p> 
-        </div>
+     <div class="padding-container">
+       <h1>New User</h1>
+        <img alt="AddUser" src="../assets/images/add-user.png" class="add-user-image">
+        <p>
+          You can create a new User with his personal information right here!.
+        </p>
+     </div> 
+      <div v-if="errors.length">
+        <p><b>Please correct the following error(s):</b></p> 
+        <p v-for="error in errors" v-bind:key="error.id" class="validation-item">{{ error }}</p> 
+      </div>
       <form 
         @submit="manageUser" 
         class="userFormFor"
@@ -46,6 +47,30 @@
           name="user.website"
           class="input"
         >
+        <br />
+
+        <label class="label" for="address.street">Street</label>
+        <br />
+        <textarea
+          id="address.street"
+          v-model="user.address.street"
+          type="text"
+          name="user.address.street"
+          class="input">
+        </textarea>
+
+
+        <br />
+
+        <label class="label" for="address.city">City</label>
+        <br />
+        <select
+          id="address.city"
+          v-model="user.address.city" 
+          name="user.address.city"
+          class="input"> 
+          <option v-for="city in cities" v-bind:key="city" v-bind:value="city">{{city}}</option>
+        </select>
         <br />
 
         <label class="label" for="phone">Phone Number</label>
@@ -102,6 +127,8 @@ export default {
     overrideUsers: Function
   },
   beforeUpdate(){
+    console.log(this.currentUser);
+    
     this.user.id = this.currentUser==null ? null : this.currentUser.id;
     this.user.name = this.currentUser==null ? (this.user.name || null) : (this.user.name || this.currentUser.name)
     this.user.email = this.currentUser==null ? (this.user.email || null) : (this.user.email || this.currentUser.email)
@@ -109,10 +136,30 @@ export default {
     this.user.phone = this.currentUser==null ? (this.user.phone || null) : (this.user.phone || this.currentUser.phone)
     this.user.company.name = this.currentUser==null ? (this.user.company.name || null) : (this.user.company.name || this.currentUser.company.name)
     this.user.company.catchPhrase = this.currentUser==null ? (this.user.company.catchPhrase || null) : (this.user.company.catchPhrase || this.currentUser.company.catchPhrase)
+    this.user.address.street = this.currentUser==null ? (this.user.address.street || null) : (this.user.address.street || this.currentUser.address.street)
+    this.user.address.city = this.currentUser==null ? (this.user.address.city || null) : (this.user.address.city || this.currentUser.address.city)
   },
   data(){
     return {
       errors: [],
+      cities: [
+        "Aliyaview", 
+        "Aliyaview",
+        "Bartholomebury",
+        "California",
+        "Gwenborough", 
+        "Howemouth",
+        "Ilopango",
+        "Lebsackbury",
+        "McKenziehaven", 
+        "Melbourne",
+        "Oslo",
+        "Roscoeview", 
+        "San Salvador",
+        "Santa Tecla",
+        "South Christy",
+        "South Elvis", 
+      ],
       user:{
         id: null,
         name: null,
@@ -122,6 +169,10 @@ export default {
         company: {
           name: null,
           catchPhrase: null
+        },
+        address: {
+          street: null,
+          city: null
         }
       }
     }
@@ -142,6 +193,10 @@ export default {
             company: {
               name: this.user.company.name,
               catchPhrase: this.user.company.catchPhrase
+            },
+            address: {
+              street: this.user.address.street,
+              city: this.user.address.city
             }
           });
           this.changeArray(usersList);
@@ -161,15 +216,22 @@ export default {
         }
       }
     },
-    cleanForm(){ 
-      Object.keys(this.user).reduce((r, k) => { 
-        if(typeof this.user[k]=="object"){
-          Object.keys(this.user[k]).reduce((r, k1) => { 
-            this.user.company.name = null;  
-            this.user.company.catchPhrase = null;  
-          })
-        } else{
-          this.user[k] = null; 
+    cleanForm(){  
+      
+      Object.keys(this.user ? this.user : {}).reduce((r, k) => { 
+        if(this.user[k] != null){
+          if(typeof this.user[k]=="object"){
+            Object.keys(this.user[k]).reduce((r, k1) => { 
+              this.user.company.name = null;  
+              this.user.company.catchPhrase = null;  
+              this.user.address.street = null;  
+              this.user.address.city = null;  
+            })
+          } else{
+            if(k!="id"){
+              this.user[k] = null; 
+            }
+          }
         }
       });
       this.openForm(false);
