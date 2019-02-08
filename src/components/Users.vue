@@ -96,12 +96,28 @@ export default {
   },
   methods:{
     deleteUser(id){ 
-      const usersList = JSON.parse(localStorage.getItem("USERS"));
-      const userIndex = usersList.findIndex(r=>r.id == id);
-      const newUserList = usersList.filter(r=>r.id !== usersList[userIndex].id);
+      this.$swal({
+          title: 'Are you sure?',
+          text: 'You can\'t revert your action',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes Delete it!',
+          cancelButtonText: 'No, Cancel!',
+          showCloseButton: true,
+          showLoaderOnConfirm: true
+        }).then((result) => {
+          if(result.value) {
+            const usersList = JSON.parse(localStorage.getItem("USERS"));
+            const userIndex = usersList.findIndex(r=>r.id == id);
+            const newUserList = usersList.filter(r=>r.id !== usersList[userIndex].id);
 
-      localStorage.setItem("USERS", JSON.stringify(newUserList))
-      this.usersArray = JSON.parse(localStorage.getItem("USERS"));
+            localStorage.setItem("USERS", JSON.stringify(newUserList))
+            this.usersArray = JSON.parse(localStorage.getItem("USERS"));
+            this.$swal('Deleted', 'You successfully deleted this file', 'success')
+          }
+        })
+
+     
     }, 
     loadUser(id){
       this.openForm(true, "edit")

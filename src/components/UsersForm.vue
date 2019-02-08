@@ -143,7 +143,6 @@ export default {
       errors: [],
       cities: [
         "Aliyaview", 
-        "Aliyaview",
         "Bartholomebury",
         "California",
         "Gwenborough", 
